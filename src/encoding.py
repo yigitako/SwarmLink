@@ -44,7 +44,21 @@ class Encoder:
         """Encode a dictionary using Bencode format."""
         encoded_items = b''
         for key in sorted(d.keys()):
-            encoded_key = self.encode_byte_string(key)
+            if isinstance(key, int):
+                encoded_key = self.encode_int(key)
+
+            elif isinstance(key, str):
+                encoded_key = self.encode_byte_string(key)
+
+            elif isinstance(key, list):
+                encoded_key = self.encode_list(key)
+
+            elif isinstance(key, dict):
+                encoded_key = self.encode_diction(key)
+
+            else:
+                raise ValueError("Unsupported data type")
+
             value = d[key]
 
             if isinstance(value, int):
@@ -61,6 +75,7 @@ class Encoder:
 
             else:
                 raise ValueError("Unsupported data type")
+
             encoded_items += encoded_key + encoded_value
         return b'd' + encoded_items + b'e'
 
@@ -83,5 +98,4 @@ class Encoder:
 
 if __name__ == "__main__":
     encoder = Encoder()
-    example_dict = {"name": "OpenAI", "A": 2, "F": 222}
-    print(encoder.to_bencode_encdoing(example_dict))
+    print(encoder.to_bencode_encdoing(['GGGG',"FFF"]))
