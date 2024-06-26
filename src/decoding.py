@@ -1,5 +1,5 @@
 import pprint
-import bencodepy
+import timeit
 
 class Decoder:
     def __init__(self):
@@ -70,10 +70,4 @@ def read_from_file(file_path):
         return file.read()
 
 if __name__ == "__main__":
-    decoder = Decoder()
-        torrent_file = read_from_file("GIVE YOUR TORRENT FILE")
-    x = bencodepy.decode(torrent_file)
-
-    y = decoder.decode(torrent_file)
-
-    print(x == y) # PRINTS TRUE :)
+    pass
