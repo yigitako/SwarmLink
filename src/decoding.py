@@ -1,81 +1,79 @@
-# Bencode decoder
+import pprint
+import bencodepy
 
-__author__ = "Yigit Akoymak"
 class Decoder:
     def __init__(self):
-        self.input = str(b'i32e', encoding="utf-8")
+        self.index = 0
 
     @staticmethod
-    def find_end_of_list(l, start_index):
-        # Helper function to find the end of a nested list
+    def find_end_of_list(data, start_index):
         count = 0
-        for i in range(start_index, len(l)):
-            if l[i] == 'l':
+        for i in range(start_index, len(data)):
+            if data[i:i + 1] == b'l':
                 count += 1
-            elif l[i] == 'e':
+            elif data[i:i + 1] == b'e':
                 count -= 1
                 if count == 0:
                     return i
         return -1
 
-    def read_from_file(self):
-        with open(r"C:\Users\yigit\Downloads\archlinux-2024.06.01-x86_64.iso.torrent", 'rb') as f:
-            b = f.read()
-        return b
+    def decode_int(self, data):
+        end_index = data.find(b'e', self.index)
+        number = int(data[self.index + 1:end_index])
+        self.index = end_index + 1
+        return number
 
-    def decode_int(self, i):
-        return i[1:len(i) - 1]
+    def decode_string(self, data):
+        colon_index = data.find(b':', self.index)
+        length = int(data[self.index:colon_index])
+        start_index = colon_index + 1
+        end_index = start_index + length
+        self.index = end_index
+        return data[start_index:end_index]
 
-    def decode_string(self, b):
-        return b[b.find(":") + 1: len(b)]
-
-    def decode_list(self, l):
+    def decode_list(self, data):
         items = []
-        index = 1  # Start after the initial 'l'
-        while index < len(l):
-            # Find the length of the next string
-            if l[index].isdigit():
-                length_end = l.find(':', index)
-                length = int(l[index:length_end])
-                string_start = length_end + 1
-                string_end = string_start + length
-                encoded_string = l[string_start:string_end]
-                decoded_string = self.decode_string(encoded_string)
-                items.append(decoded_string)
-                index = string_end
-
-            # Find the int
-            elif l[index] == 'i':
-                start_index = index
-                e_index = l.find('e', start_index)
-                substring = l[start_index:e_index + 1]
-                decoded_int = self.decode_int(substring)
-                items.append(decoded_int)
-                index = e_index + 1  # Move past 'e'
-
-            # Handle nested list
-            elif l[index] == 'l':
-                # Find the end of the nested list
-                nested_end = self.find_end_of_list(l, index)
-                nested_list = l[index:nested_end + 1]
-                decoded_list = self.decode_list(nested_list)
-                items.append(decoded_list)
-                index = nested_end + 1
-            if l[index] == 'd':
-                pass
-            else:
-                index += 1
+        self.index += 1
+        while data[self.index:self.index + 1] != b'e':
+            items.append(self.decode(data))
+        self.index += 1
         return items
 
-    def decode_dict(self):
-        pass
+    def decode_dict(self, data):
+        dict_items = {}
+        self.index += 1
 
-    def decode_bencode(self):
-        pass
+        while data[self.index:self.index + 1] != b'e':
+            key = self.decode(data)
+            value = self.decode(data)
+            dict_items[key] = value
 
+        self.index += 1
+        return dict_items
+
+    def decode(self, data):
+        if data[self.index:self.index + 1] == b'd':
+            return self.decode_dict(data)
+
+        elif data[self.index:self.index + 1] == b'l':
+            return self.decode_list(data)
+
+        elif data[self.index:self.index + 1] == b'i':
+            return self.decode_int(data)
+
+        elif b'0' <= data[self.index:self.index + 1] <= b'9':
+            return self.decode_string(data)
+
+
+def read_from_file(file_path):
+    with open(file_path, 'rb') as file:
+        return file.read()
 
 if __name__ == "__main__":
-    Dec = Decoder()
-    torrent_file = Dec.read_from_file()
-    print(torrent_file)
-    print(Dec.decode_list('l5:Helloi42el6:Nested4:Listee'))  # d5:Hello5:World3:fooi42ee))
+    decoder = Decoder()
+        torrent_file = read_from_file("GIVE YOUR TORRENT FILE")
+    x = bencodepy.decode(torrent_file)
+
+    y = decoder.decode(torrent_file)
+
+    print(x == y) # PRINTS TRUE :)

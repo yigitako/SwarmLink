@@ -1,6 +1,5 @@
 # BENCODE encoder
 class Encoder:
-
     # TODO: isinstance is repeated often, USE A FUNCTION OR PATTERN(?) to minimise the code:
     # TODO: THERE SHOULD BE MORE TYPE CHECKS TO IMPROVE SAFETY.
     def __init__(self, encode='utf-8'):
@@ -98,4 +97,4 @@ class Encoder:
 
 if __name__ == "__main__":
     encoder = Encoder()
-    print(encoder.to_bencode_encdoing(['GGGG',"FFF"]))
+    print(encoder.to_bencode_encdoing({"TINA":902200, "TITAN":["3f",3033]}))

@@ -1,6 +1,6 @@
 SwarmLink
 ==================================
-.. image:: C:\Users\yigit\PycharmProjects\SwarmLink\Documentation\images\SwarmLink_logo.webp
+.. image:: SwarmLink\Documentation\images\SwarmLink_logo.webp
   :width: 200
   :alt: Alternative text
 
