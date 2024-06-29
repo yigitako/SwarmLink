@@ -1,21 +1,25 @@
-import pprint
-import timeit
+""" BENCODE DECODER
+   AUTHOR :: YIGIT AKOYMAK
+   DATE   :: 27.06.2024
 
+   SwarmLink Bittorent Protocol Implementation
+   Copyright (C) 2024  Yigit AKoymak
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <https://www.gnu.org/licenses/>.
+"""
 class Decoder:
     def __init__(self):
         self.index = 0
-
-    @staticmethod
-    def find_end_of_list(data, start_index):
-        count = 0
-        for i in range(start_index, len(data)):
-            if data[i:i + 1] == b'l':
-                count += 1
-            elif data[i:i + 1] == b'e':
-                count -= 1
-                if count == 0:
-                    return i
-        return -1
 
     def decode_int(self, data):
         end_index = data.find(b'e', self.index)
@@ -29,7 +33,11 @@ class Decoder:
         start_index = colon_index + 1
         end_index = start_index + length
         self.index = end_index
-        return data[start_index:end_index]
+        # TODO: THE TRY EXCEPT IS STUPID IDEA, THIS IS JUST A QUICK HACK.
+        try:
+            return data[start_index:end_index].decode()
+        except UnicodeDecodeError:
+            return data[start_index:end_index]
 
     def decode_list(self, data):
         items = []
@@ -68,6 +76,3 @@ class Decoder:
 def read_from_file(file_path):
     with open(file_path, 'rb') as file:
         return file.read()
-
-if __name__ == "__main__":
-    pass
