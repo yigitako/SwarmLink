@@ -17,6 +17,7 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+from src.utils.log_utils.log import log
 
 
 class Encoder:
@@ -80,5 +81,11 @@ class Encoder:
         else:
             raise TypeError(f"Unsupported data type: {type(value)}")
 
+    @log(cls='encode', level='info')
     def to_bencode_encoding(self, inp) -> bytes:
         return self.encode_value(inp)
+
+
+if __name__ == "__main__":
+    Encdr = Encoder()
+    Encdr.to_bencode_encoding()

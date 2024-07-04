@@ -17,6 +17,8 @@
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
+
+
 class Decoder:
     def __init__(self):
         self.index = 0
@@ -76,3 +78,8 @@ class Decoder:
 def read_from_file(file_path):
     with open(file_path, 'rb') as file:
         return file.read()
+
+
+if __name__ == "__main__":
+    Dec = Decoder()
+    Dec.decode(b'l4:yiiii32ee')
