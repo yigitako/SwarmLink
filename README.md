@@ -17,6 +17,12 @@
   <a href="#license">License</a>
 </p>
 
+## What is SwarmLink?
+
+SwarmLink is a BitTorrent V1 implementation written purely in Python. This project includes all fundamental features of
+the BitTorrent protocol, including torrent creation, peer discovery, piece selection, and data transfer. Written
+entirely in Python.
+
 ## Key Features
 
 ## How To Use
