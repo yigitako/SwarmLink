@@ -18,18 +18,14 @@
    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 """
 import unittest
+from src.Network.udp.udp_connect_request import UdpTrackerConnection
 
-import decode_test
-import encode_test
-import udp_connect_request_test
 
-if __name__ == "__main__":
-    loader = unittest.TestLoader()
-    suite = unittest.TestSuite()
+class UdpTrackerConnectionTest(unittest.TestCase):
+    def test_conn_id(self):
+        udp = UdpTrackerConnection()
+        self.assertEqual(udp.conn_id, b"\x00\x00\x04\x17'\x10\x19\x80")
 
-    suite.addTests(loader.loadTestsFromModule(encode_test))
-    suite.addTests(loader.loadTestsFromModule(decode_test))
-    suite.addTests(loader.loadTestsFromModule(udp_connect_request_test))
-    # Run the test suite
-    runner = unittest.TextTestRunner()
-    runner.run(suite)
+    def test_action(self):
+        udp = UdpTrackerConnection()
+        self.assertEqual(udp.action, b'\x00\x00\x00\x00')

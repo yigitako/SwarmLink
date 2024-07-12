@@ -20,13 +20,13 @@
 
 # from src.Bencode.encoding import Encoder
 from src.Bencode.decoding import Decoder, read_from_file
+from random import randint
 import pprint
 
 dec = Decoder()
 
 BitTorrent_meta = dec.decode(
     read_from_file(r"C:\Users\yigit\PycharmProjects\SwarmLink\tests\torrent_files\big-buck-bunny.torrent"))
-pprint.pp(BitTorrent_meta)
 
 
 class TorrentMetaInfo:
@@ -37,3 +37,8 @@ class TorrentMetaInfo:
         self.creation_date: str = BitTorrent_meta.get("created by", None)
         self.encoding: str = BitTorrent_meta.get("encoding", None)
         self.info: dict = BitTorrent_meta.get('info', None)
+        self.peer_id = self.__create_peer_id()
+
+    @staticmethod
+    def __create_peer_id() -> str:
+        return "SW" + "0.0.1-" + "".join([str(randint(1, 9)) for _ in range(1, 11)])

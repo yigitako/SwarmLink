@@ -142,5 +142,3 @@ class BencodeEncodingTest(unittest.TestCase):
         for tests in self.to_bencode:
             self.assertEqual(encoder.to_bencode_encoding(tests), self.bencode_answers[self.cnt])
             self.cnt += 1
-
-

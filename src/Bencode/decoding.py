@@ -23,13 +23,13 @@ class Decoder:
     def __init__(self):
         self.index = 0
 
-    def decode_int(self, data):
+    def decode_int(self, data) -> int:
         end_index = data.find(b'e', self.index)
         number = int(data[self.index + 1:end_index])
         self.index = end_index + 1
         return number
 
-    def decode_string(self, data):
+    def decode_string(self, data) -> str:
         colon_index = data.find(b':', self.index)
         length = int(data[self.index:colon_index])
         start_index = colon_index + 1
@@ -78,8 +78,3 @@ class Decoder:
 def read_from_file(file_path):
     with open(file_path, 'rb') as file:
         return file.read()
-
-
-if __name__ == "__main__":
-    Dec = Decoder()
-    Dec.decode(b'l4:yiiii32ee')

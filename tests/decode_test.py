@@ -14,13 +14,13 @@ class TestBencodeDecoder(unittest.TestCase):
 
     def test_decode_string(self):
         encoded = b'5:hello'
-        self.assertEqual(self.decoder.decode_string(encoded), b'hello')
+        self.assertEqual(self.decoder.decode_string(encoded), 'hello')
 
     def test_decode_list(self):
         encoded = b'li123e5:helloe'
-        self.assertEqual(self.decoder.decode_list(encoded), [123, b'hello'])
+        self.assertEqual(self.decoder.decode_list(encoded), [123, 'hello'])
 
     def test_decode_dict(self):
         encoded = b'd3:bar4:spam3:fooi42ee'
-        expected = {b'bar': b'spam', b'foo': 42}
+        expected = {'bar': 'spam', 'foo': 42}
         self.assertEqual(self.decoder.decode_dict(encoded), expected)
